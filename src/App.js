@@ -8,52 +8,79 @@ import { MovieDetails } from "./MovieDetails";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import Paper from "@mui/material/Paper";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
 
 function App() {
   // Lifting the state up
   const [movieList, setMovieList] = useState(INITIAL_MOVIE_LIST);
   const navigate = useNavigate();
-  return (
-    <div className="App">
-      <AppBar position="static">
-        <Toolbar>
-          <Button color="inherit" onClick={() => navigate("/")}>
-            Home
-          </Button>
-          <Button color="inherit" onClick={() => navigate(`/movies`)}>
-            Movies
-          </Button>
-          <Button color="inherit" onClick={() => navigate(`/movies/app`)}>
-            Add Movies
-          </Button>
-          <Button color="inherit" onClick={() => navigate("/AddColor")}>
-            Color Game
-          </Button>
-        </Toolbar>
-      </AppBar>
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/movies"
-          element={
-            <MovieList movieList={movieList} setMovieList={setMovieList} />
-          }
-        />
-        <Route
-          path="/movies/add"
-          element={
-            <MovieList movieList={movieList} setMovieList={setMovieList} />
-          }
-        />
-        <Route
-          path="/movies/:id"
-          element={<MovieDetails movieList={movieList} />}
-        />
-        <Route path="/AddColor" element={<AddColor />} />
-        {/* <Route path="about" element={<About />} /> */}
-      </Routes>
-    </div>
+  const [mode, setMode] = useState("dark");
+  const theme = createTheme({
+    palette: {
+      mode: mode,
+    },
+  });
+
+  return (
+    <ThemeProvider theme={theme}>
+      <Paper elevation={4} style={{ minHeight: "100vh", borderRadius: "0" }}>
+        <div className="App">
+          <AppBar position="static">
+            <Toolbar>
+              <Button color="inherit" onClick={() => navigate("/")}>
+                Home
+              </Button>
+              <Button color="inherit" onClick={() => navigate(`/movies`)}>
+                Movies
+              </Button>
+              <Button color="inherit" onClick={() => navigate(`/movies/add`)}>
+                Add Movies
+              </Button>
+              <Button color="inherit" onClick={() => navigate("/AddColor")}>
+                Color Game
+              </Button>
+              <Button
+                startIcon={
+                  mode === "light" ? <Brightness4Icon /> : <Brightness7Icon />
+                }
+                color="inherit"
+                onClick={() => setMode(mode === "light" ? "dark" : "light")}
+              >
+                {mode === "light" ? "dark" : "light"} Theme
+              </Button>
+            </Toolbar>
+          </AppBar>
+
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route
+              path="/movies"
+              element={
+                <MovieList movieList={movieList} setMovieList={setMovieList} />
+              }
+            />
+
+            <Route
+              path="/movies/:id"
+              element={<MovieDetails movieList={movieList} />}
+            />
+            <Route
+              path="/movies/add"
+              element={
+                <AddMovie movieList={movieList} setMovieList={setMovieList} />
+              }
+            />
+            <Route path="/AddColor" element={<AddColor />} />
+            {/* <Route path="about" element={<About />} /> */}
+          </Routes>
+        </div>
+      </Paper>
+    </ThemeProvider>
   );
 }
 
@@ -143,6 +170,71 @@ function Home() {
   return (
     <div>
       <h1>Welcome to the movie App 😍🍘🍘</h1>
+    </div>
+  );
+}
+
+function AddMovie({ movieList, setMovieList }) {
+  const [name, setName] = useState("");
+  const [poster, setPoster] = useState("");
+  const [summary, setSummary] = useState("");
+  const [rating, setRating] = useState("");
+  const [trailer, setTrailer] = useState("");
+
+  const addMovie = () => {
+    const newMovie = {
+      name,
+      rating,
+      summary,
+      poster,
+      trailer,
+    };
+
+    console.log(newMovie);
+
+    setMovieList([...movieList, newMovie]);
+  };
+  return (
+    <div className="add-movie-form">
+      {/* <TextField id="outlined-basic" label="Outlined" variant="outlined" /> */}
+      <TextField
+        id="outlined-basic"
+        variant="outlined"
+        type="text"
+        label="Name"
+        onChange={(event) => setName(event.target.value)}
+      />
+      <TextField
+        id="outlined-basic"
+        variant="outlined"
+        type="text"
+        label="Poster"
+        onChange={(event) => setPoster(event.target.value)}
+      />
+      <TextField
+        id="outlined-basic"
+        variant="outlined"
+        type="text"
+        label="Summary"
+        onChange={(event) => setSummary(event.target.value)}
+      />
+      <TextField
+        id="outlined-basic"
+        variant="outlined"
+        type="text"
+        label="Rating"
+        onChange={(event) => setRating(event.target.value)}
+      />
+      <TextField
+        id="outlined-basic"
+        variant="outlined"
+        type="text"
+        label="Trailer"
+        onChange={(event) => setTrailer(event.target.value)}
+      />
+      <Button variant="contained" color="success" onClick={addMovie}>
+        Add Movie
+      </Button>
     </div>
   );
 }

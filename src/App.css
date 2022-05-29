@@ -36,9 +36,21 @@ img {
   text-align: center;
 }
 
+
+.added-color {
+  margin-top: 2vh;
+  display: flex;
+  flex-direction: column;
+ justify-content: center;
+ align-items: center;
+}
+
 .add-color {
   display: flex;
+  flex-direction: row;
+  gap: 10px;
 }
+
 
 .movie-specs {
   display: flex;
@@ -49,6 +61,7 @@ img {
 .movie-container {
   /* background-color: orange; */
   width: 340px;
+  height: min-content;
 }
 
 .movie-poster {
@@ -71,6 +84,7 @@ img {
 }
 
 .movie-list-container {
+  margin-top: 5vh;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
@@ -79,6 +93,7 @@ img {
 }
 
 .add-movie-form{
+  margin-top: 2vh;
   height: auto;
   display: grid;
   flex-direction: column;
